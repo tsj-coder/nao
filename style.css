@@ -1,0 +1,41 @@
+:root {
+  --ink: #2b2b33;
+  --sub: #6b6b78;
+  --line: #e3e3ea;
+  --accent: #3a5a8c;
+  --bg: #fbfbfd;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  padding: 0 20px 64px;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Noto Sans JP", sans-serif;
+  line-height: 1.8;
+  -webkit-text-size-adjust: 100%;
+}
+main, .head, .foot { max-width: 720px; margin: 0 auto; }
+.head { padding: 32px 0 24px; }
+.head h1 { font-size: 24px; margin: 0 0 12px; }
+.lead { color: var(--sub); font-size: 15px; margin: 0; }
+.back { margin: 0 0 16px; font-size: 14px; }
+a { color: var(--accent); }
+.issues { list-style: none; margin: 0; padding: 0; }
+.issue { border-top: 1px solid var(--line); }
+.issue:last-child { border-bottom: 1px solid var(--line); }
+.issue a {
+  display: block; padding: 16px 0; text-decoration: none; color: inherit;
+}
+.issue a:hover .headline { text-decoration: underline; }
+.no { font-weight: 700; margin-right: 12px; }
+.date { color: var(--sub); font-size: 13px; }
+.headline { display: block; margin-top: 4px; color: var(--accent); }
+.count { color: var(--sub); font-size: 13px; text-align: right; }
+.foot { border-top: 1px solid var(--line); margin-top: 40px; padding-top: 16px;
+        color: var(--sub); font-size: 13px; }
+.links { list-style: none; margin: 24px 0 0; padding: 0; }
+.links li { border-top: 1px solid var(--line); }
+.links li:last-child { border-bottom: 1px solid var(--line); }
+.links a { display: block; padding: 16px 0; text-decoration: none; }
+.links .desc { display: block; color: var(--sub); font-size: 14px; }
