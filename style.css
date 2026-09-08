@@ -1,41 +1,274 @@
+/* なお｜一人で抱え込まない学校事務
+   配色は _figure_template/base.css のクロッカス基調に揃える。
+   書体は端末のものを使う（Webフォントは読み込まない。日本語フォントは重く、
+   LINEから開く読者と学校の回線を待たせるため）。
+   見出しは明朝、本文は丸ゴ。硬さとやわらかさを一枚で出す。 */
+
 :root {
-  --ink: #2b2b33;
-  --sub: #6b6b78;
-  --line: #e3e3ea;
-  --accent: #3a5a8c;
-  --bg: #fbfbfd;
+  --crocus:      #b79fcb;
+  --crocus-deep: #7f679a;
+  --crocus-mid:  #cbb6dc;
+  --crocus-soft: #e3d7ed;
+  --crocus-pale: #f2ecf7;
+  --paper:       #fbfafd;
+  --ink:         #4a4356;
+  --ink-soft:    #7c7489;
+  --accent:      #d99a86;
+  --accent-pale: #f7e6df;
+
+  --display: "Hiragino Mincho ProN", "Yu Mincho", "YuMincho", "Noto Serif JP", serif;
+  --body: "ヒラギノ丸ゴ ProN", "Hiragino Maru Gothic ProN", "Hiragino Sans",
+          "Noto Sans JP", sans-serif;
+
+  --wrap: 760px;
 }
-* { box-sizing: border-box; }
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
 body {
-  margin: 0;
-  padding: 0 20px 64px;
-  background: var(--bg);
+  background: var(--paper);
   color: var(--ink);
-  font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Noto Sans JP", sans-serif;
-  line-height: 1.8;
-  -webkit-text-size-adjust: 100%;
+  font-family: var(--body);
+  font-size: 16px;
+  line-height: 1.9;
+  -webkit-font-smoothing: antialiased;
 }
-main, .head, .foot { max-width: 720px; margin: 0 auto; }
-.head { padding: 32px 0 24px; }
-.head h1 { font-size: 24px; margin: 0 0 12px; }
-.lead { color: var(--sub); font-size: 15px; margin: 0; }
-.back { margin: 0 0 16px; font-size: 14px; }
-a { color: var(--accent); }
-.issues { list-style: none; margin: 0; padding: 0; }
-.issue { border-top: 1px solid var(--line); }
-.issue:last-child { border-bottom: 1px solid var(--line); }
-.issue a {
-  display: block; padding: 16px 0; text-decoration: none; color: inherit;
+
+/* 左右だけを指定する。padding の一括指定にすると、同じ要素に付く
+   .masthead や .sec の上下余白を記述順しだいで打ち消してしまう。 */
+.wrap {
+  max-width: var(--wrap);
+  margin: 0 auto;
+  padding-left: 24px;
+  padding-right: 24px;
 }
-.issue a:hover .headline { text-decoration: underline; }
-.no { font-weight: 700; margin-right: 12px; }
-.date { color: var(--sub); font-size: 13px; }
-.headline { display: block; margin-top: 4px; color: var(--accent); }
-.count { color: var(--sub); font-size: 13px; text-align: right; }
-.foot { border-top: 1px solid var(--line); margin-top: 40px; padding-top: 16px;
-        color: var(--sub); font-size: 13px; }
-.links { list-style: none; margin: 24px 0 0; padding: 0; }
-.links li { border-top: 1px solid var(--line); }
-.links li:last-child { border-bottom: 1px solid var(--line); }
-.links a { display: block; padding: 16px 0; text-decoration: none; }
-.links .desc { display: block; color: var(--sub); font-size: 14px; }
+
+a { color: var(--crocus-deep); }
+a:focus-visible {
+  outline: 2px solid var(--crocus-deep);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* ── 名乗り ─────────────────────────────── */
+
+.masthead {
+  padding: 56px 0 48px;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto 1fr;
+  column-gap: 30px;
+  align-items: start;
+}
+
+/* 縦組みは2行ぶんを貫く。ペンギンはその足元に置いて構図を閉じる。 */
+.masthead .tagline { grid-row: 1 / 3; }
+.masthead .who { grid-column: 2; }
+.masthead .mascot { grid-column: 2; grid-row: 2; justify-self: end; align-self: end; }
+
+/* 縦組みのタグライン。このページで唯一の派手な要素。 */
+.tagline {
+  writing-mode: vertical-rl;
+  font-family: var(--display);
+  font-size: clamp(19px, 5.2vw, 27px);
+  line-height: 1.55;
+  letter-spacing: 0.16em;
+  color: var(--crocus-deep);
+  border-right: 1px solid var(--crocus-soft);
+  padding-right: 16px;
+  margin-top: 4px;
+  min-height: 11.2em;
+}
+
+.who h1 {
+  font-family: var(--display);
+  font-size: clamp(34px, 9vw, 46px);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  line-height: 1.2;
+}
+
+.who .handle {
+  font-size: 14px;
+  color: var(--ink-soft);
+  letter-spacing: 0.04em;
+  margin-top: 6px;
+}
+
+.who .intro {
+  margin-top: 20px;
+  font-size: 15px;
+  color: var(--ink);
+}
+
+.mascot { width: 132px; height: auto; }
+
+/* ── 見出し ─────────────────────────────── */
+
+.sec { padding: 40px 0; border-top: 1px solid var(--crocus-soft); }
+
+.sec > h2 {
+  font-family: var(--display);
+  font-size: 19px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  color: var(--crocus-deep);
+  margin-bottom: 6px;
+}
+
+.sec > .note {
+  font-size: 13.5px;
+  color: var(--ink-soft);
+  margin-bottom: 22px;
+}
+
+/* ── 領域のインデックス（簿冊の見出し） ──────── */
+
+.tabs { list-style: none; display: flex; flex-wrap: wrap; gap: 8px; }
+
+.tabs li {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 7px 14px 7px 11px;
+  background: var(--crocus-pale);
+  border-left: 4px solid var(--crocus-soft);
+  border-radius: 0 12px 12px 0;
+  font-size: 14.5px;
+  line-height: 1.4;
+}
+
+/* 本数が多い領域ほど、タブの色が濃くなる。飾りではなく実際の偏り。 */
+.tabs li[data-weight="3"] { background: var(--crocus-soft); border-left-color: var(--crocus-deep); }
+.tabs li[data-weight="2"] { background: var(--crocus-pale); border-left-color: var(--crocus); }
+.tabs li[data-weight="1"] { background: #fff; border-left-color: var(--crocus-soft); }
+
+.tabs .n {
+  font-size: 12px;
+  color: var(--ink-soft);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── 入口 ───────────────────────────────── */
+
+.doors { list-style: none; }
+
+.doors li + li { border-top: 1px solid var(--crocus-soft); }
+
+.doors a {
+  display: block;
+  padding: 20px 0;
+  text-decoration: none;
+  color: inherit;
+}
+
+.doors .label {
+  font-family: var(--display);
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--crocus-deep);
+}
+
+.doors .desc {
+  display: block;
+  margin-top: 5px;
+  font-size: 14px;
+  color: var(--ink-soft);
+}
+
+.doors a:hover .label { text-decoration: underline; text-underline-offset: 4px; }
+
+/* ── 先生方へ ───────────────────────────── */
+
+.picks { list-style: none; }
+
+.picks li { padding: 14px 0; }
+.picks li + li { border-top: 1px dotted var(--crocus-soft); }
+
+.picks a {
+  text-decoration: none;
+  color: var(--crocus-deep);
+  font-size: 15px;
+  line-height: 1.75;
+  display: inline-block;
+}
+
+.picks a:hover { text-decoration: underline; text-underline-offset: 4px; }
+
+.picks .field {
+  display: inline-block;
+  margin-right: 8px;
+  padding: 1px 7px;
+  border-radius: 3px;
+  background: var(--accent-pale);
+  color: #a3644f;
+  font-size: 11.5px;
+  letter-spacing: 0.04em;
+  vertical-align: 2px;
+}
+
+/* ── 足元 ───────────────────────────────── */
+
+.foot {
+  border-top: 1px solid var(--crocus-soft);
+  padding: 26px 0 64px;
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+
+/* ── バックナンバー一覧（build.py の出力） ───── */
+
+.back { font-size: 13.5px; margin-bottom: 22px; }
+
+.issues { list-style: none; }
+
+.issue { border-top: 1px solid var(--crocus-soft); }
+.issue:last-child { border-bottom: 1px solid var(--crocus-soft); }
+
+.issue a { display: block; padding: 18px 0; text-decoration: none; color: inherit; }
+
+.issue .no {
+  font-family: var(--display);
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--crocus-deep);
+  letter-spacing: 0.06em;
+  margin-right: 12px;
+}
+
+.issue .date {
+  font-size: 12.5px;
+  color: var(--ink-soft);
+  font-variant-numeric: tabular-nums;
+}
+
+.issue .headline {
+  display: block;
+  margin-top: 5px;
+  font-size: 15px;
+  line-height: 1.75;
+}
+
+.issue a:hover .headline { text-decoration: underline; text-underline-offset: 4px; }
+
+.count { margin-top: 18px; font-size: 12.5px; color: var(--ink-soft); text-align: right; }
+
+/* ── 狭い画面 ───────────────────────────── */
+
+@media (max-width: 560px) {
+  .masthead {
+    grid-template-columns: auto 1fr;
+    gap: 20px;
+    padding: 40px 0 36px;
+  }
+  .masthead .mascot { width: 92px; }
+  .tagline { min-height: 10em; padding-right: 13px; }
+  .wrap { padding-left: 20px; padding-right: 20px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
