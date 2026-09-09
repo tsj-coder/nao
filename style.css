@@ -103,6 +103,14 @@ a:focus-visible {
   color: var(--ink);
 }
 
+.who .intro + .intro { margin-top: 14px; }
+
+.who .kana {
+  margin-top: 18px;
+  font-size: 12.5px;
+  color: var(--ink-soft);
+}
+
 .mascot { width: 132px; height: auto; }
 
 /* ── 見出し ─────────────────────────────── */
