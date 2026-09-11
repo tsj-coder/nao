@@ -8,6 +8,7 @@
 
 noteのAPIは1ページ6件しか返さない。isLastPage が真になるまでページを繰る。
 """
+import datetime
 import json
 import re
 import sys
@@ -70,7 +71,7 @@ def weight(n):
     return 1
 
 
-def render(counts, total):
+def render(counts, total, as_of):
     fields = [(f, n) for f, n in counts.most_common() if f not in NOT_A_FIELD]
     rows = "\n".join(
         '      <li data-weight="{w}"><span>{f}</span><span class="n">{n}</span></li>'.format(
@@ -78,9 +79,10 @@ def render(counts, total):
         for f, n in fields
     )
     return (
-        '    <p class="note">noteに{total}本。実務の領域ごとに整理しています。数字は本数です。</p>\n'
+        '    <p class="note">noteに{total}本（{as_of}時点）。実務の領域ごとに整理しています。数字は本数です。</p>\n'
         '    <ul class="tabs">\n{rows}\n    </ul>'
-    ).format(total=total, rows=rows)
+    ).format(total=total, rows=rows,
+             as_of="{}年{}月{}日".format(as_of.year, as_of.month, as_of.day))
 
 
 def main():
@@ -89,7 +91,7 @@ def main():
         print("取得件数({})とAPIのtotalCount({})が食い違う。中断する。".format(len(titles), total))
         return 1
     counts = count_fields(titles)
-    block = render(counts, total)
+    block = render(counts, total, datetime.date.today())
 
     path = HERE / "index.html"
     s = path.read_text(encoding="utf-8")
