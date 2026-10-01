@@ -10,6 +10,9 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 
+# 公式LINE「なお」の友だち追加URL。note記事の末尾と同じもの。
+LINE_URL = "https://lin.ee/O8516km"
+
 TEMPLATE = """<!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -27,11 +30,18 @@ TEMPLATE = """<!DOCTYPE html>
     <p class="back"><a href="../">← なおのページ</a></p>
     <h1>学校事務ウィークリー</h1>
     <p class="handle">全国の公立学校事務職員へ</p>
-    <p class="intro">学校事務と教育まわりのニュースを、実務メモを付けて1枚にまとめています。
-    新しい号が出たら、公式LINEでお知らせしています。</p>
+    <p class="intro">学校事務と教育まわりのニュースを、実務メモを付けて1枚にまとめています。</p>
   </div>
   <img class="mascot" src="../mascot-weekly.png" alt="">
 </header>
+
+<aside class="wrap" aria-label="公式LINEの友だち追加">
+  <div class="line-cta">
+    <p class="line-lead">最新号は、公式LINEで届きます</p>
+    <p class="line-desc">毎週末、新しい号が出たらすぐにLINEでお届けします。このページを探しに来なくても、手元で読めます。</p>
+    <a class="line-btn" href="{{LINE}}">LINEで友だち追加する</a>
+  </div>
+</aside>
 
 <main class="sec wrap">
   <h2>バックナンバー</h2>
@@ -40,6 +50,7 @@ TEMPLATE = """<!DOCTYPE html>
 {{ROWS}}
   </ul>
   <p class="count">全{{COUNT}}号</p>
+  <p class="line-again">次の号を見逃さないように。<a href="{{LINE}}">公式LINEで受け取る</a></p>
 </main>
 
 <footer class="foot wrap">
@@ -76,7 +87,9 @@ def render(issues):
         )
         for i in issues
     )
-    return TEMPLATE.replace("{{ROWS}}", rows).replace("{{COUNT}}", str(len(issues)))
+    return (TEMPLATE.replace("{{ROWS}}", rows)
+            .replace("{{COUNT}}", str(len(issues)))
+            .replace("{{LINE}}", LINE_URL))
 
 
 def main(root=HERE):

@@ -46,6 +46,17 @@ def test_号数と発行日と見出しが表示される():
         assert want in out, want
 
 
+def test_LINE登録への導線が一覧の前後にある():
+    out = build.render([
+        {"no": 9, "date": "2026-09-05", "headline": "見出し", "pdf": "weekly-009.pdf"},
+    ])
+    assert out.count('href="https://lin.ee/O8516km"') == 2, "LINE登録のリンクが2か所にない"
+    top = out.index("lin.ee/O8516km")
+    last = out.rindex("lin.ee/O8516km")
+    issues = out.index('class="issues"')
+    assert top < issues < last, "一覧の前と後ろに置かれていない"
+
+
 def test_1件もなくてもHTMLになる():
     out = build.render([])
     assert "<html" in out and "</html>" in out
