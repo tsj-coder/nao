@@ -5,7 +5,7 @@ import sys
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
-PAGES = [HERE / "index.html", HERE / "weekly" / "index.html"]
+PAGES = [HERE / "index.html", HERE / "weekly" / "index.html", HERE / "kasuhara" / "index.html"]
 
 HREF = re.compile(r'(?:href|src)="([^"]+)"')
 
@@ -35,6 +35,7 @@ def test_トップにバックナンバーとnoteへの導線がある():
     text = (HERE / "index.html").read_text(encoding="utf-8")
     assert 'href="weekly/"' in text, "バックナンバーへのリンクが無い"
     assert "https://note.com/nao_school" in text, "noteへのリンクが無い"
+    assert 'href="kasuhara/"' in text, "カスハラ判定一覧へのリンクが無い"
 
 
 if __name__ == "__main__":
