@@ -13,6 +13,17 @@
 
   function all(sel, base) { return Array.prototype.slice.call((base || document).querySelectorAll(sel)); }
 
+  /* 安全装置：画面の描画（コマ送り）が止まっている環境では、動きが始まらず
+     隠したままになる。3秒たってもほとんど進んでいなければ、動きをやめて全部見せる。
+     （アプリ内ブラウザが裏で開かれたときなど。2026-10-14 に実際に起きた） */
+  setTimeout(function () {
+    if (gsap.ticker.frame > 5) return;
+    window.ScrollTrigger.getAll().forEach(function (t) { t.kill(); });
+    gsap.globalTimeline.getChildren().forEach(function (t) { t.kill(); });
+    gsap.set(all('.hero *, .sec *'), { clearProps: 'opacity,transform' });
+    root.classList.remove('motion');
+  }, 3000);
+
   var mm = gsap.matchMedia();
 
   mm.add('(prefers-reduced-motion: no-preference)', function () {
