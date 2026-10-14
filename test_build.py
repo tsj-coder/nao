@@ -74,6 +74,99 @@ def test_ファイルに書き出せる():
         assert "第1号" in out.read_text(encoding="utf-8")
 
 
+MARKS = "".join(
+    "<!-- {0}:ここから（build.py が書き換える。手で編集しない） -->\n古い\n<!-- {0}:ここまで -->\n".format(n)
+    for n in ("目次", "ウィークリー最新号", "つくったもの"))
+
+WORK = {"title": "t", "desc": "d", "url": "u/", "img": "img/x.webp", "cta": "くわしく"}
+
+
+def test_最新号は先頭の号で日付が年月日になる():
+    out = build.render_latest([
+        {"no": 14, "date": "2026-10-10", "headline": "見出し<b>", "pdf": "weekly-014.pdf"},
+        {"no": 13, "date": "2026-10-03", "headline": "前の号", "pdf": "weekly-013.pdf"},
+    ])
+    assert "第14号" in out and "2026年10月10日" in out, out
+    assert 'href="weekly/pdf/weekly-014.pdf"' in out, out
+    assert "&lt;b&gt;" in out and "<b>" not in out
+    assert "前の号" not in out
+
+
+def test_号がなければ最新号は空():
+    assert build.render_latest([]) == ""
+
+
+def test_つくったものはファイル順でエスケープされる():
+    out = build.render_works([
+        {"title": "A&B", "desc": "説明", "url": "kasuhara/", "img": "img/card-a.webp", "cta": "ひらく"},
+        {"title": "二番", "desc": "", "url": "https://example.com/", "img": "img/card-b.webp", "cta": "くわしく"},
+    ])
+    assert out.index("A&amp;B") < out.index("二番")
+    assert 'id="works"' in out and 'href="kasuhara/"' in out
+    assert 'src="img/card-a.webp"' in out
+
+
+def test_つくったものが空なら区切りごと出ない():
+    assert build.render_works([]) == ""
+
+
+def test_つくったものに販売の言葉が出ない():
+    out = build.render_works([WORK])
+    for ng in ("販売", "購入", "円"):
+        assert ng not in out, ng
+
+
+def test_目次はつくったものの有無で変わる():
+    with_works = build.render_toc(True)
+    assert 'href="#works"' in with_works
+    assert 'href="#works"' not in build.render_toc(False)
+    for a in ("#weekly", "#fields", "#teachers"):
+        assert a in with_works, a
+
+
+def test_目印の間だけ書き換わり二度やっても同じ():
+    s = "前\n" + MARKS + "後"
+    once = build.replace_block(s, "目次", "新しい")
+    assert once.startswith("前\n") and once.endswith("後")
+    assert "新しい" in once and once.count("古い") == 2
+    assert build.replace_block(once, "目次", "新しい") == once
+
+
+def test_目印がなければ止まる():
+    try:
+        build.replace_block("目印なし", "目次", "x")
+    except ValueError as e:
+        assert "目次" in str(e)
+        return
+    assert False, "ValueError にならない"
+
+
+def test_worksも号もなくてもトップが組める():
+    with tempfile.TemporaryDirectory() as d:
+        root = Path(d)
+        (root / "issues.json").write_text("[]", encoding="utf-8")
+        (root / "index.html").write_text("<html>\n" + MARKS + "</html>", encoding="utf-8")
+        build.main(root)
+        top = (root / "index.html").read_text(encoding="utf-8")
+        assert 'id="works"' not in top and "古い" not in top
+        assert top.startswith("<html>") and top.endswith("</html>")
+
+
+def test_トップに最新号とつくったものが入る():
+    with tempfile.TemporaryDirectory() as d:
+        root = Path(d)
+        (root / "issues.json").write_text(json.dumps([
+            {"no": 2, "date": "2026-07-18", "headline": "二号の見出し", "pdf": "weekly-002.pdf"},
+        ], ensure_ascii=False), encoding="utf-8")
+        (root / "works.json").write_text(json.dumps([WORK], ensure_ascii=False), encoding="utf-8")
+        (root / "index.html").write_text("<html>\n" + MARKS + "</html>", encoding="utf-8")
+        build.main(root)
+        build.main(root)  # 二度目で崩れない
+        top = (root / "index.html").read_text(encoding="utf-8")
+        assert "二号の見出し" in top and 'id="works"' in top and 'href="#works"' in top
+        assert top.count('id="works"') == 1
+
+
 if __name__ == "__main__":
     for name, fn in sorted(globals().items()):
         if name.startswith("test_"):

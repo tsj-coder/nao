@@ -70,6 +70,121 @@ ROW = """  <li class="issue">
   </li>"""
 
 
+# ── トップページの、目印で挟んだ部分 ─────────────────
+# index.html の目印の間だけを書き換える。外側（名乗り・先生方へ）は手で直せる。
+MARK_START = "<!-- {}:ここから（build.py が書き換える。手で編集しない） -->"
+MARK_END = "<!-- {}:ここまで -->"
+
+# 区切りの上端の波。index.html の各区切りと同じ形にそろえる。
+WAVE = ('<svg class="wave" viewBox="0 0 1200 60" preserveAspectRatio="none" aria-hidden="true">'
+        '<path d="M0 34 C200 4 380 58 600 30 C800 6 1000 20 1200 34 L1200 60 L0 60 Z"/></svg>')
+
+LATEST = """      <a class="latest reveal" href="weekly/pdf/{pdf}">
+        <span class="latest-tag">最新号</span>
+        <span class="latest-meta"><span class="latest-no">第{no}号</span><span class="latest-date">{date}</span></span>
+        <span class="latest-head">{headline}</span>
+        <span class="latest-go">PDFをひらく →</span>
+      </a>"""
+
+WORK = """        <li class="work reveal">
+          <a href="{url}">
+            <span class="work-art"><img src="{img}" alt="" loading="lazy"></span>
+            <span class="work-body">
+              <span class="work-title">{title}</span>
+              <span class="work-desc">{desc}</span>
+              <span class="work-cta">{cta} →</span>
+            </span>
+          </a>
+        </li>"""
+
+# 値段や「販売」の語は出さない（設計書3章）。有料かどうかは飛んだ先で分かればよい。
+WORKS_SECTION = """  <section class="sec sec-tint" id="works" aria-labelledby="works-h">
+    """ + WAVE + """
+    <div class="wrap sec-in">
+      <img class="sec-art" src="img/adult-board.webp" alt="">
+      <p class="eyebrow">Works</p>
+      <h2 id="works-h">つくったもの</h2>
+      <p class="lead">現場で使っている道具と、ペンギンのスタンプ。</p>
+      <ul class="works">
+{{CARDS}}
+      </ul>
+      <img class="peek" src="img/kid-done.webp" alt="">
+    </div>
+  </section>"""
+
+TOC_ITEMS = [("weekly", "ウィークリー"), ("fields", "書いていること"),
+             ("works", "つくったもの"), ("teachers", "先生方へ")]
+
+
+def esc(v):
+    return html.escape(str(v), quote=True)
+
+
+def replace_block(text, name, block):
+    """目印「name」の間を block に置き換える。目印がなければ ValueError。"""
+    start, end = MARK_START.format(name), MARK_END.format(name)
+    if start not in text or end not in text:
+        raise ValueError("index.html に目印「{}」が見つからない".format(name))
+    head, rest = text.split(start, 1)
+    _, tail = rest.split(end, 1)
+    body = "\n" + block.rstrip("\n") + "\n" if block else "\n"
+    return head + start + body + end + tail
+
+
+def jdate(s):
+    """2026-10-10 → 2026年10月10日"""
+    y, m, d = (int(x) for x in str(s).split("-"))
+    return "{}年{}月{}日".format(y, m, d)
+
+
+def render_latest(issues):
+    """号数の降順に並んだ一覧の先頭を、最新号の枠にする。号がなければ空。"""
+    if not issues:
+        return ""
+    i = issues[0]
+    return LATEST.format(pdf=esc(i["pdf"]), no=int(i["no"]),
+                         date=esc(jdate(i["date"])), headline=esc(i["headline"]))
+
+
+def load_works(path):
+    """works.json を読む。無ければ空の一覧。"""
+    p = Path(path)
+    if not p.exists():
+        return []
+    return json.loads(p.read_text(encoding="utf-8"))
+
+
+def render_works(works):
+    """つくったものの区切りを丸ごと作る。1件もなければ区切りごと出さない。"""
+    if not works:
+        return ""
+    cards = "\n".join(
+        WORK.format(**{k: esc(w.get(k, "")) for k in ("title", "desc", "url", "img", "cta")})
+        for w in works)
+    return WORKS_SECTION.replace("{{CARDS}}", cards)
+
+
+def render_toc(has_works):
+    """目次のボタン。つくったものが無ければ、そのボタンも出さない。"""
+    lis = "\n".join(
+        '      <li><a href="#{}">{}</a></li>'.format(a, t)
+        for a, t in TOC_ITEMS if has_works or a != "works")
+    return '    <ul class="toc-list">\n{}\n    </ul>'.format(lis)
+
+
+def update_top(root):
+    """index.html の目次・最新号・つくったものを書き直す。"""
+    root = Path(root)
+    path = root / "index.html"
+    s = path.read_text(encoding="utf-8")
+    issues = load_issues(root / "issues.json")
+    works = load_works(root / "works.json")
+    s = replace_block(s, "目次", render_toc(bool(works)))
+    s = replace_block(s, "ウィークリー最新号", render_latest(issues))
+    s = replace_block(s, "つくったもの", render_works(works))
+    path.write_text(s, encoding="utf-8")
+
+
 def load_issues(path):
     """issues.json を読み、号数の降順で返す。"""
     data = json.loads(Path(path).read_text(encoding="utf-8"))
@@ -99,6 +214,9 @@ def main(root=HERE):
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(render(issues), encoding="utf-8")
     print("出力: {}（{}号）".format(out, len(issues)))
+    if (root / "index.html").exists():
+        update_top(root)
+        print("出力: {}（目次・最新号・つくったもの）".format(root / "index.html"))
 
 
 if __name__ == "__main__":
