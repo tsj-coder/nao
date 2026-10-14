@@ -6,6 +6,7 @@ weekly/index.html は毎回上書きされる。手で編集しないこと。
 """
 import html
 import json
+import re
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
@@ -31,7 +32,7 @@ TEMPLATE = """<!DOCTYPE html>
 <link rel="apple-touch-icon" href="../img/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Old+Mincho:wght@600&amp;display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,500&amp;family=Zen+Old+Mincho:wght@600&amp;display=swap">
 <link rel="stylesheet" href="../style.css">
 <script>
   if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
@@ -200,9 +201,12 @@ def render_works(works):
     """つくったものの区切りを丸ごと作る。1件もなければ区切りごと出さない。"""
     if not works:
         return ""
-    cards = "\n".join(
-        WORK.format(**{k: esc(w.get(k, "")) for k in ("title", "desc", "url", "img", "cta")})
-        for w in works)
+    def card(w):
+        v = {k: esc(w.get(k, "")) for k in ("title", "desc", "url", "img", "cta")}
+        # 【日常編】のような添え書きは、途中で折り返さずに丸ごと次の行へ送る
+        v["title"] = re.sub(r"(【[^】]*】)", r'<span class="nb">\1</span>', v["title"])
+        return WORK.format(**v)
+    cards = "\n".join(card(w) for w in works)
     return WORKS_SECTION.replace("{{CARDS}}", cards)
 
 

@@ -106,6 +106,11 @@ def test_つくったものはファイル順でエスケープされる():
     assert 'src="img/card-a.webp"' in out
 
 
+def test_題名の隅付き括弧は途中で折り返さない():
+    out = build.render_works([dict(WORK, title="学校事務のペンギン【日常編】")])
+    assert '学校事務のペンギン<span class="nb">【日常編】</span>' in out, out
+
+
 def test_つくったものが空なら区切りごと出ない():
     assert build.render_works([]) == ""
 
