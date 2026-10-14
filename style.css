@@ -50,6 +50,9 @@ body {
 
 img { max-width: 100%; height: auto; display: block; }
 
+/* 見出しの最後の1〜2文字だけが次の行に落ちないよう、行の長さをそろえる */
+h1, h2, .line-lead, .work-title, .latest-head { text-wrap: balance; }
+
 /* 左右だけを指定する（上下の余白は各部品が持つ） */
 .wrap {
   max-width: var(--wrap);
