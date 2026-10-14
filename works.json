@@ -1,5 +1,7 @@
 [
   {"title": "カスハラ判定一覧", "desc": "保護者や地域の人の言動が、カスハラにあたるかどうか。電話・来校・SNSなど場面ごとに「妥当・グレー・アウト」で引ける早見表", "url": "kasuhara/", "img": "img/card-kasuhara.webp", "cta": "ひらく"},
+  {"title": "予算管理ツール", "desc": "引き継ぎ資料も、残額確認も、来年度の要求書も。学校・自治体の予算まわりを1ファイルにまとめた管理ツール", "url": "https://note.com/nao_school/n/nb528a6267586?magazine_key=m1932de6f1f8c", "img": "img/card-budget.webp", "cta": "くわしく"},
+  {"title": "電話・来客対応マニュアル", "desc": "配ってすぐ使える、学校の電話・来客対応マニュアル。受話器を取る手が、少しだけ軽くなる", "url": "https://note.com/nao_school/n/nacf1b6c350fe?magazine_key=m1932de6f1f8c", "img": "img/card-phone.webp", "cta": "くわしく"},
   {"title": "学校事務のペンギン【日常編】", "desc": "ていねいなあいさつから「決裁おりました」「本日定時！」まで。事務室の毎日に寄り添うLINEスタンプ", "url": "https://line.me/S/sticker/35256083", "img": "img/card-stamp1.webp", "cta": "くわしく"},
   {"title": "学校事務のペンギン【実務編】", "desc": "「供覧します」「起案しました」など、事務職員の一年に寄り添うLINEスタンプ", "url": "https://line.me/S/sticker/35661571", "img": "img/card-stamp2.webp", "cta": "くわしく"}
 ]
