@@ -27,7 +27,7 @@ def test_見出しの記号がエスケープされる():
         {"no": 1, "date": "2026-07-11", "headline": "<script>x</script>",
          "pdf": "weekly-001.pdf"},
     ])
-    assert "<script>" not in out, "生のタグが出力に残っている"
+    assert "<script>x</script>" not in out, "生のタグが出力に残っている"
     assert "&lt;script&gt;" in out
 
 

@@ -4,33 +4,121 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>なお｜一人で抱え込まない学校事務</title>
-<meta name="description" content="学校事務の「この判断でいいのか」を、根拠までさかのぼって言葉にしています。週刊「学校事務ウィークリー」とnoteの記事の入口です。">
+<meta name="description" content="学校事務の「この判断でいいのか」を、根拠までさかのぼって言葉にしています。週刊「学校事務ウィークリー」とnoteの記事、つくった道具の入口です。">
+<meta name="theme-color" content="#7f679a">
+<meta property="og:type" content="website">
+<meta property="og:title" content="なお｜一人で抱え込まない学校事務">
+<meta property="og:description" content="理由がわかれば、迷いは軽くなる。学校事務の判断を、根拠までさかのぼって言葉にしています。">
+<meta property="og:url" content="https://tsj-coder.github.io/nao/">
+<meta property="og:image" content="https://tsj-coder.github.io/nao/img/ogp.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="img/favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Old+Mincho:wght@600&amp;display=swap">
 <link rel="stylesheet" href="style.css">
+<script>
+  /* 動きの合図。動きを減らす設定の人には付けない。GSAPが読めなければ外して全部見せる。 */
+  if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    document.documentElement.classList.add('motion');
+    setTimeout(function () { if (!window.gsap) document.documentElement.classList.remove('motion'); }, 2500);
+  }
+</script>
 </head>
 <body>
 
-<header class="masthead wrap">
-  <p class="tagline">理由がわかれば、迷いは軽くなる。</p>
-  <div class="who">
-    <h1>なお</h1>
-    <p class="handle">一人で抱え込まない学校事務</p>
-    <p class="intro">「この判断でいいのか」と、一人で悩んできました。
-    学校に事務職員は私一人。近くの先輩にすぐ聞けるとも限りません。</p>
-    <p class="intro">迷ったところを、根拠までさかのぼってnoteに書いています。
-    私自身が思考を整理するための場所でもあります。
-    同じように迷う方と、一緒に前に進めたらうれしいです。</p>
-    <p class="intro">制度改正や通知は、思わぬところから飛んできます。
-    「あれ、話題になっていますよね」と振られて、まったく知らずに焦ったことが何度もありました。
-    かといって発信元はばらばらで、探すだけで時間がかかります。
-    そこだけでも仕組みにしたくて、週に一度「学校事務ウィークリー」を出しています。</p>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <!-- ちぎり紙のふち。にじみ形の輪郭をわずかに揺らす -->
+  <filter id="torn" x="-5%" y="-5%" width="110%" height="110%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="3" seed="7"/>
+    <feDisplacementMap in="SourceGraphic" scale="14"/>
+  </filter>
+</svg>
+
+<header class="hero">
+  <div class="wrap hero-in">
+    <p class="hero-en">Think with reasons</p>
+    <p class="hero-tag"><span>理由がわかれば、</span><span>迷いは軽くなる。</span></p>
+    <div class="hero-art" aria-hidden="true">
+      <svg class="blob" viewBox="0 0 400 320">
+        <path class="blob-a" d="M62 70 C128 6 262 14 318 66 C382 128 360 238 286 276 C210 314 92 304 50 240 C8 176 12 116 62 70 Z"/>
+        <path class="blob-b" d="M96 92 C160 48 254 58 296 100 C338 150 318 222 254 252 C190 282 106 266 78 210 C52 158 54 120 96 92 Z"/>
+      </svg>
+      <img class="prop prop-1" src="img/prop-sticky.webp" alt="">
+      <img class="prop prop-2" src="img/prop-crocus.webp" alt="">
+      <img class="prop prop-3" src="img/prop-clip.webp" alt="">
+      <img class="prop prop-4" src="img/prop-pencil.webp" alt="">
+      <img class="prop prop-5" src="img/prop-leaf.webp" alt="">
+      <img class="hero-adult" src="img/hero-adult.webp" alt="">
+      <img class="hero-kid" src="img/kid-ask.webp" alt="">
+    </div>
+    <div class="hero-name-box">
+      <h1 class="hero-name">なお</h1>
+      <p class="hero-handle">一人で抱え込まない学校事務</p>
+    </div>
   </div>
-  <img class="mascot" src="mascot.png" alt="">
 </header>
+
+<nav class="toc" aria-label="このページの目次">
+  <div class="wrap">
+<!-- 目次:ここから（build.py が書き換える。手で編集しない） -->
+    <ul class="toc-list">
+      <li><a href="#weekly">ウィークリー</a></li>
+      <li><a href="#fields">書いていること</a></li>
+      <li><a href="#works">つくったもの</a></li>
+      <li><a href="#teachers">先生方へ</a></li>
+    </ul>
+<!-- 目次:ここまで -->
+  </div>
+</nav>
 
 <main>
 
-  <section class="sec wrap">
-    <h2>書いていること</h2>
+  <section class="sec" id="about" aria-labelledby="about-h">
+    <div class="wrap sec-in">
+      <img class="sec-art" src="img/adult-tea.webp" alt="">
+      <p class="eyebrow">About</p>
+      <h2 id="about-h">なおのこと</h2>
+      <div class="about">
+        <p class="reveal">「この判断でいいのか」と、一人で悩んできました。
+        学校に事務職員は私一人。近くの先輩にすぐ聞けるとも限りません。</p>
+        <p class="reveal">迷ったところを、根拠までさかのぼってnoteに書いています。
+        私自身が思考を整理するための場所でもあります。
+        同じように迷う方と、一緒に前に進めたらうれしいです。</p>
+        <p class="reveal">制度改正や通知は、思わぬところから飛んできます。
+        「あれ、話題になっていますよね」と振られて、まったく知らずに焦ったことが何度もありました。
+        かといって発信元はばらばらで、探すだけで時間がかかります。
+        そこだけでも仕組みにしたくて、週に一度「学校事務ウィークリー」を出しています。</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec sec-tint" id="weekly" aria-labelledby="weekly-h">
+    <svg class="wave" viewBox="0 0 1200 60" preserveAspectRatio="none" aria-hidden="true"><path d="M0 34 C200 4 380 58 600 30 C800 6 1000 20 1200 34 L1200 60 L0 60 Z"/></svg>
+    <div class="wrap sec-in">
+      <img class="sec-art" src="img/adult-hand.webp" alt="">
+      <p class="eyebrow">Weekly</p>
+      <h2 id="weekly-h">学校事務ウィークリー</h2>
+      <p class="lead">週に一度、五分で追いつく。学校事務と教育まわりのニュースを、実務メモ付きで1枚に。</p>
+<!-- ウィークリー最新号:ここから（build.py が書き換える。手で編集しない） -->
+      <a class="latest reveal" href="weekly/pdf/weekly-014.pdf">
+        <span class="latest-tag">最新号</span>
+        <span class="latest-meta"><span class="latest-no">第14号</span><span class="latest-date">2026年10月9日</span></span>
+        <span class="latest-head">次期学習指導要領の「審議まとめ」公表、11月5日まで意見募集 — 調整授業時数制度や「情報」の新設</span>
+        <span class="latest-go">PDFをひらく →</span>
+      </a>
+<!-- ウィークリー最新号:ここまで -->
+      <p class="more reveal"><a class="btn-line" href="weekly/">過去号をすべて見る →</a></p>
+    </div>
+  </section>
+
+  <section class="sec" id="fields" aria-labelledby="fields-h">
+    <svg class="wave" viewBox="0 0 1200 60" preserveAspectRatio="none" aria-hidden="true"><path d="M0 34 C200 4 380 58 600 30 C800 6 1000 20 1200 34 L1200 60 L0 60 Z"/></svg>
+    <div class="wrap sec-in">
+      <img class="sec-art" src="img/adult-book.webp" alt="">
+      <p class="eyebrow">Notes</p>
+      <h2 id="fields-h">書いていること</h2>
 <!-- 書いていること:ここから（fetch_fields.py が書き換える。手で編集しない） -->
     <p class="note">noteに78本（2026年10月10日時点）。実務の領域ごとに整理しています。数字は本数です。</p>
     <ul class="tabs">
@@ -52,53 +140,100 @@
       <li data-weight="1"><span>教科書</span><span class="n">1</span></li>
     </ul>
     <!-- 書いていること:ここまで -->
+      <p class="more reveal"><a class="btn" href="https://note.com/nao_school">noteで読む →</a></p>
+      <img class="peek" src="img/kid-memo.webp" alt="">
+    </div>
   </section>
 
-  <section class="sec wrap">
-    <h2>入口</h2>
-    <ul class="doors">
-      <li>
-        <a href="weekly/">
-          <span class="label">学校事務ウィークリー</span>
-          <span class="desc">週に1回、学校事務と教育まわりのニュースを実務メモ付きでまとめた紙面。過去号はここから読めます</span>
-        </a>
-      </li>
-      <li>
-        <a href="kasuhara/">
-          <span class="label">カスハラ判定一覧</span>
-          <span class="desc">保護者や地域の人の言動が、カスハラにあたるかどうか。電話・来校・SNSなど場面ごとに「妥当・グレー・アウト」で引ける早見表</span>
-        </a>
-      </li>
-      <li>
-        <a href="https://note.com/nao_school">
-          <span class="label">noteの記事</span>
-          <span class="desc">制度の読み解きと、仕事の進め方。上の領域ごとに続けて書いています</span>
-        </a>
-      </li>
-    </ul>
+<!-- つくったもの:ここから（build.py が書き換える。手で編集しない） -->
+  <section class="sec sec-tint" id="works" aria-labelledby="works-h">
+    <svg class="wave" viewBox="0 0 1200 60" preserveAspectRatio="none" aria-hidden="true"><path d="M0 34 C200 4 380 58 600 30 C800 6 1000 20 1200 34 L1200 60 L0 60 Z"/></svg>
+    <div class="wrap sec-in">
+      <img class="sec-art" src="img/adult-board.webp" alt="">
+      <p class="eyebrow">Works</p>
+      <h2 id="works-h">つくったもの</h2>
+      <p class="lead">現場で使っている道具と、ペンギンのスタンプ。</p>
+      <ul class="works">
+        <li class="work reveal">
+          <a href="kasuhara/">
+            <span class="work-art"><img src="img/card-kasuhara.webp" alt="" loading="lazy"></span>
+            <span class="work-body">
+              <span class="work-title">カスハラ判定一覧</span>
+              <span class="work-desc">保護者や地域の人の言動が、カスハラにあたるかどうか。電話・来校・SNSなど場面ごとに「妥当・グレー・アウト」で引ける早見表</span>
+              <span class="work-cta">ひらく →</span>
+            </span>
+          </a>
+        </li>
+        <li class="work reveal">
+          <a href="https://line.me/S/sticker/35256083">
+            <span class="work-art"><img src="img/card-stamp1.webp" alt="" loading="lazy"></span>
+            <span class="work-body">
+              <span class="work-title">学校事務のペンギン【日常編】</span>
+              <span class="work-desc">ていねいなあいさつから「決裁おりました」「本日定時！」まで。事務室の毎日に寄り添うLINEスタンプ</span>
+              <span class="work-cta">くわしく →</span>
+            </span>
+          </a>
+        </li>
+        <li class="work reveal">
+          <a href="https://line.me/S/sticker/35661571">
+            <span class="work-art"><img src="img/card-stamp2.webp" alt="" loading="lazy"></span>
+            <span class="work-body">
+              <span class="work-title">学校事務のペンギン【実務編】</span>
+              <span class="work-desc">「供覧します」「起案しました」など、事務職員の一年に寄り添うLINEスタンプ</span>
+              <span class="work-cta">くわしく →</span>
+            </span>
+          </a>
+        </li>
+      </ul>
+      <img class="peek" src="img/kid-done.webp" alt="">
+    </div>
+  </section>
+<!-- つくったもの:ここまで -->
+
+  <section class="sec" id="teachers" aria-labelledby="teachers-h">
+    <svg class="wave" viewBox="0 0 1200 60" preserveAspectRatio="none" aria-hidden="true"><path d="M0 34 C200 4 380 58 600 30 C800 6 1000 20 1200 34 L1200 60 L0 60 Z"/></svg>
+    <div class="wrap sec-in">
+      <img class="sec-art" src="img/adult-point.webp" alt="">
+      <p class="eyebrow">For teachers</p>
+      <h2 id="teachers-h">先生方へ</h2>
+      <p class="lead">事務職員に向けて書いていますが、先生にも関わる制度を扱った回があります。</p>
+      <ul class="picks">
+        <li class="reveal">
+          <a href="https://note.com/nao_school/n/n35153c9b0c50"><span class="field">人事服務</span>給特法・変形労働時間制・フレックスタイム。同じ職員室で制度が食い違う理由</a>
+        </li>
+        <li class="reveal">
+          <a href="https://note.com/nao_school/n/n40a0b0ce2e9c"><span class="field">学校組織運営</span>学校のルールは誰が決めるのか。学校教育法から読み解く校長の権限</a>
+        </li>
+        <li class="reveal">
+          <a href="https://note.com/nao_school/n/na699a82acddb"><span class="field">人事服務</span>有給か無給か。「休暇」と「休業」の違いと、復職後の働き方</a>
+        </li>
+      </ul>
+    </div>
   </section>
 
-  <section class="sec wrap">
-    <h2>先生方へ</h2>
-    <p class="note">事務職員に向けて書いていますが、先生にも関わる制度を扱った回があります。</p>
-    <ul class="picks">
-      <li>
-        <a href="https://note.com/nao_school/n/n35153c9b0c50"><span class="field">人事服務</span>給特法・変形労働時間制・フレックスタイム。同じ職員室で制度が食い違う理由</a>
-      </li>
-      <li>
-        <a href="https://note.com/nao_school/n/n40a0b0ce2e9c"><span class="field">学校組織運営</span>学校のルールは誰が決めるのか。学校教育法から読み解く校長の権限</a>
-      </li>
-      <li>
-        <a href="https://note.com/nao_school/n/na699a82acddb"><span class="field">人事服務</span>有給か無給か。「休暇」と「休業」の違いと、復職後の働き方</a>
-      </li>
-    </ul>
+  <section class="sec sec-line" id="line" aria-labelledby="line-h">
+    <svg class="wave" viewBox="0 0 1200 60" preserveAspectRatio="none" aria-hidden="true"><path d="M0 34 C200 4 380 58 600 30 C800 6 1000 20 1200 34 L1200 60 L0 60 Z"/></svg>
+    <div class="wrap sec-in">
+      <img class="sec-art" src="img/adult-wave.webp" alt="">
+      <p class="eyebrow">LINE</p>
+      <h2 id="line-h">最新号は、公式LINEで届きます</h2>
+      <p class="lead">毎週末、新しい号が出たらすぐにLINEでお届けします。このページを探しに来なくても、手元で読めます。</p>
+      <p class="reveal"><a class="btn btn-big" href="https://lin.ee/O8516km">LINEで友だち追加する</a></p>
+      <img class="peek" src="img/kid-idea.webp" alt="">
+    </div>
   </section>
 
 </main>
 
-<footer class="foot wrap">
-  <p>お問い合わせは公式LINEのトークからどうぞ。</p>
+<footer class="foot">
+  <div class="wrap">
+    <p>お問い合わせは公式LINEのトークからどうぞ。</p>
+    <p class="foot-name">なお｜一人で抱え込まない学校事務</p>
+  </div>
 </footer>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js" integrity="sha512-NcZdtrT77bJr4STcmsGAESr06BYGE8woZdSdEgqnpyqac7sugNO+Tr4bGwGF3MsnEkGKhU2KL2xh6Ec+BqsaHA==" crossorigin="anonymous" referrerpolicy="no-referrer" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollTrigger.min.js" integrity="sha512-P2IDYZfqSwjcSjX0BKeNhwRUH8zRPGlgcWl5n6gBLzdi4Y5/0O4zaXrtO4K9TZK6Hn1BenYpKowuCavNandERg==" crossorigin="anonymous" referrerpolicy="no-referrer" defer></script>
+<script src="motion.js" defer></script>
 </body>
 </html>
