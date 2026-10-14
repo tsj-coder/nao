@@ -147,7 +147,7 @@ a:focus-visible {
 .prop-1 { left: 2%;  top: 6%;  transform: rotate(-10deg); }
 .prop-2 { right: 30%; top: 0;  width: 14%; }
 .prop-3 { right: 4%; top: 46%; width: 9%; transform: rotate(18deg); }
-.prop-4 { left: -2%; bottom: 30%; width: 15%; transform: rotate(-24deg); }
+.prop-4 { left: -4%; bottom: 12%; width: 14%; transform: rotate(-24deg); }
 .prop-5 { right: 22%; bottom: -2%; width: 11%; }
 
 .hero-name-box { margin-top: 10px; }
@@ -503,12 +503,15 @@ a:focus-visible {
     display: grid;
     grid-template-columns: 1fr 1.15fr;
     grid-template-areas: "en art" "name art";
-    grid-template-rows: auto 1fr;
+    grid-template-rows: 1fr 1fr;
     column-gap: 40px;
-    align-items: end;
   }
-  .hero-en { grid-area: en; align-self: start; }
-  .hero-name-box { grid-area: name; padding-bottom: 48px; }
+  /* 英字・名前・肩書きをひとかたまりにして、絵の高さの中央に置く */
+  .hero-en { grid-area: en; align-self: end; margin-bottom: 14px; }
+  .hero-name-box { grid-area: name; align-self: start; }
+  .hero-name { font-size: 88px; }
+  .hero-handle { font-size: 16px; margin-top: 8px; }
+  .hero-sub .hero-name { font-size: 46px; }
   .hero-art { grid-area: art; max-width: 540px; margin: 0; justify-self: end; width: 100%; }
   .hero-tag { right: calc(var(--gutter) + 8px); top: 4px; }
   .hero-sub .hero-art { max-width: 400px; }
