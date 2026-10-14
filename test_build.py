@@ -172,6 +172,21 @@ def test_トップに最新号とつくったものが入る():
         assert top.count('id="works"') == 1
 
 
+def test_見出しの書体は使う文字だけを頼む():
+    page = ('<link rel="stylesheet" href="' + build.FONT_URL.format(text="") + '">'
+            '<h1 class="hero-name">なお</h1><h2 id="x">先生方へ</h2>'
+            '<span class="work-title">道具<span class="nb">【日常編】</span></span>'
+            '<p>本文の字は入れない</p>')
+    out = build.set_display_font([page])[0]
+    url = out.split('href="')[1].split('"')[0]
+    import urllib.parse
+    text = urllib.parse.parse_qs(urllib.parse.urlsplit(url.replace("&amp;", "&")).query)["text"][0]
+    for ch in "なお先生方へ道具【日常編】第号0123456789":
+        assert ch in text, ch
+    assert "本" not in text and "<" not in text
+    assert build.set_display_font([out])[0] == out, "二度やると変わる"
+
+
 if __name__ == "__main__":
     for name, fn in sorted(globals().items()):
         if name.startswith("test_"):

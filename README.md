@@ -12,6 +12,13 @@ Claude Code に「今週号をアーカイブに追加して」と伝える。�
     python3 add_issue.py <PDFのパス> <号数> <発行日> "<トップ記事の見出し>"
 
 PDFのコピー・issues.json への追記・weekly/index.html の組み直しが一度に走る。
+トップページの「ウィークリー最新号」も、このとき自動で新しい号に変わる。
+
+## 「つくったもの」に足すとき
+
+`works.json` に1件足して `python3 build.py` を回す。並びはファイルの順。
+値段や「販売」「購入」の言葉はトップに書かない（飛んだ先で分かればよい）。
+カードの絵は `img/card-*.webp`（幅200px、`../nao絵づくり/export.py` で作る）。
 
 ## 入れてはいけないもの
 
@@ -22,6 +29,12 @@ gitは一度入れたファイルを消しても履歴に残る。候補一覧�
 ## ファイルの役割
 
 - `issues.json` … 号の一覧データ。毎週ここに1件増える
-- `build.py` … issues.json から weekly/index.html を組み立てる
+- `build.py` … issues.json から weekly/index.html を、issues.json と works.json からトップの目印の間を組み立てる
 - `add_issue.py` … 毎週の追加作業をまとめて行う
 - `weekly/index.html` … **手で編集しない。** build.py の出力
+- `index.html` … トップ。目印コメントで挟んだ「目次」「ウィークリー最新号」「つくったもの」は build.py、
+  「書いていること」は fetch_fields.py が書き換える。目印の外側（名乗り・先生方へ）は手で直してよい
+- `works.json` … 「つくったもの」のカード
+- `style.css` … 見た目。先頭の変数で色・書体・余白を決めている
+- `motion.js` … 動き（GSAP 3.13.0）。動きを減らす設定の人と、GSAP が読めないときは何もしない
+- `img/` … 絵（WebP）とアイコン。元の大きいPNGは置かない。絵づくりの道具は親リポジトリの `発信/nao絵づくり/`

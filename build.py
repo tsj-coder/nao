@@ -7,6 +7,7 @@ weekly/index.html は毎回上書きされる。手で編集しないこと。
 import html
 import json
 import re
+import urllib.parse
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
@@ -32,7 +33,8 @@ TEMPLATE = """<!DOCTYPE html>
 <link rel="apple-touch-icon" href="../img/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,500&amp;family=Zen+Old+Mincho:wght@600&amp;display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,500&amp;display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Old+Mincho:wght@600&amp;text=&amp;display=swap">
 <link rel="stylesheet" href="../style.css">
 <script>
   if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
@@ -159,6 +161,35 @@ TOC_ITEMS = [("weekly", "ウィークリー"), ("fields", "書いていること
              ("works", "つくったもの"), ("teachers", "先生方へ")]
 
 
+# ── 見出しの書体 ─────────────────────────────
+# Zen Old Mincho は見出しにしか使わない。ページに出てくる見出しの文字だけを Google Fonts に頼むと、
+# 分割された十数個のファイル（約285KB）が、1つの小さなファイルになる。
+# 号や「つくったもの」が増えたら build.py が数え直すので、手で直さない。
+FONT_URL = "https://fonts.googleapis.com/css2?family=Zen+Old+Mincho:wght@600&amp;text={text}&amp;display=swap"
+FONT_LINK_RE = re.compile(
+    r"https://fonts\.googleapis\.com/css2\?family=Zen\+Old\+Mincho:wght@600&amp;text=[^\"]*&amp;display=swap")
+# 見出しの書体で表示する要素（style.css の var(--display) を使うもの）
+DISPLAY_RE = re.compile(
+    r'<(h1|h2)\b[^>]*>(.*?)</\1>'
+    r'|<(\w+)\b[^>]*class="(?:hero-tag|latest-no|work-title|line-lead|no|foot-name)"[^>]*>(.*?)</\3>', re.S)
+ALWAYS = "第号0123456789"  # 号数は毎週変わるので、数字は先に入れておく
+
+
+def display_chars(pages):
+    chars = set(ALWAYS)
+    for page in pages:
+        for m in DISPLAY_RE.finditer(page):
+            inner = m.group(2) if m.group(2) is not None else m.group(4)
+            chars.update(html.unescape(re.sub(r"<[^>]+>", "", inner)))
+    return "".join(sorted(c for c in chars if not c.isspace()))
+
+
+def set_display_font(pages):
+    """各ページの見出し書体のURLを、全ページで使う文字だけを頼む形に書き換える。"""
+    url = FONT_URL.format(text=urllib.parse.quote(display_chars(pages), safe=""))
+    return [FONT_LINK_RE.sub(url, page) for page in pages]
+
+
 def esc(v):
     return html.escape(str(v), quote=True)
 
@@ -260,9 +291,14 @@ def main(root=HERE):
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(render(issues), encoding="utf-8")
     print("出力: {}（{}号）".format(out, len(issues)))
+    pages = [out]
     if (root / "index.html").exists():
         update_top(root)
         print("出力: {}（目次・最新号・つくったもの）".format(root / "index.html"))
+        pages.append(root / "index.html")
+    texts = set_display_font([p.read_text(encoding="utf-8") for p in pages])
+    for p, t in zip(pages, texts):
+        p.write_text(t, encoding="utf-8")
 
 
 if __name__ == "__main__":
